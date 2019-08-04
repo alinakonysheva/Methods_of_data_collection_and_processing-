@@ -28,7 +28,7 @@ def parse_page(search):
         price = div.find('span', attrs={'class': "price"})['content']
         link = 'https://www.avito.ru/' + div.find('a', attrs={'class': "item-description-title-link"})['href']
         ad_id = div['data-item-id']
-        doc_data = {'price': int(price), 'link': link, 'ad_id': int(ad_id)}
+        doc_data = {'price': int(price), 'link': link, 'ad_id': int(ad_id), 'search': search}
         list_doc_data.append(doc_data)
     return list_doc_data
 
@@ -51,9 +51,9 @@ def get_db_collection():
 
 # to look for objects with a price less than it was required
 
-def db_search(max_price):
+def db_search(max_price, search):
     docs = get_db_collection()
-    for doc in docs.find({"price": {"$lt": max_price}}):
+    for doc in docs.find({"price": {"$lt": max_price}, "search": search}):
         print(doc['price'], doc['link'], doc['ad_id'])
 
 
@@ -61,4 +61,4 @@ if __name__ == '__main__':
     my_search = input('Please, enter your search here: ')
     my_price = int(input('Please, enter the highest price you can afford : '))
     save_to_db(parse_page(my_search))
-    db_search(my_price)
+    db_search(my_price, my_search)
