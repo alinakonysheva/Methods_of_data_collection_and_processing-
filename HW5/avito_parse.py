@@ -37,9 +37,7 @@ def parse_page(search):
 def save_to_db(list_jsons):
     docs = get_db_collection()
     for adv in list_jsons:
-        docs.insert_one(adv)
-    # result = docs.insert_many(doc_data)
-    # print(f"New doc: {result.inserted_id}")
+        docs.update_one({'ad_id': adv['ad_id']}, {"$setOnInsert": adv}, True)
 
 
 # to create db client  and return an object of a collection
