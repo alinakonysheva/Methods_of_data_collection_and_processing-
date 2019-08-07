@@ -1,21 +1,10 @@
 # Написать программу, которая собирает входящие письма из своего или тестового почтового ящика и сложить данные
 #  о письмах в базу данных (от кого, дата отправки, тема письма, текст письма)
-"""
-from selenium import webdriver
 
-options = webdriver.ChromeOptions()
-# options.add_argument('user-agent = Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
-driver = webdriver.Chrome(options=options, executable_path=r'/Users/ally/dev/chromedriver')
-driver.get('https://ya.ru/')
-
-# pass: Orwellthebest
-# login: al.konysheva@ya.ru
-"""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import pymongo
-
 
 
 def get_db_collection():
@@ -43,7 +32,6 @@ elem = driver.find_elements_by_class_name(
 if len(elem) > 0:
     elem[0].click()
     time.sleep(5)
-print(driver.title)
 
 elem = driver.find_elements_by_link_text('Лёгкая версия')
 elem = elem[len(elem) - 1]
@@ -59,8 +47,6 @@ for link in range(len(elem)):
     url = elem[link].get_attribute('href')
     driver.get(url)
     time.sleep(2)
-    # тема письма, текст письма)
-    # """
     from_whom = driver.find_elements_by_xpath("//span[@class='b-message-head__person']")[0].text
     sending_date = driver.find_elements_by_xpath("//span[@class='b-message-head__date']")[0].text
     subject = driver.find_elements_by_xpath("//span[@class='b-message-head__subject-text']")[0].text
@@ -76,4 +62,3 @@ for link in range(len(elem)):
     elem = driver.find_elements_by_xpath(base_xpath)
 
 driver.quit()
-
